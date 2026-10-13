@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>하나생명 GA 업무지원</title>
+    <meta property="og:title" content="설계매니저 연락처">
+    <style>
+        :root { 
+            --hana-teal: #008485; 
+            --hana-teal-light: #eef7f7;
+            --hana-teal-dark: #005a5b;
+            --bg-main: #eff2f2;
+            --card-bg: #ffffff;
+            --active-green-pastel: #86efac; 
+        }
+
+        body { 
+            font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif; 
+            background-color: var(--bg-main); 
+            margin: 0; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            padding: 30px 20px; 
+            min-height: 100vh; 
+            -webkit-font-smoothing: antialiased; 
+        }
+
+        .container { 
+            width: 100%; 
+            max-width: 560px; 
+            text-align: center; 
+            background: var(--card-bg); 
+            padding: 50px 25px; 
+            border-radius: 36px; 
+            box-shadow: 0 12px 30px rgba(0, 40, 40, 0.04); 
+            box-sizing: border-box; 
+            position: relative; 
+        }
+
+        h1 { 
+            color: #222; 
+            font-size: 2.3rem; 
+            font-weight: 800; 
+            margin-bottom: 12px; 
+            letter-spacing: -1px; 
+            word-break: keep-all; 
+        }
+
+        .sub-title { 
+            color: var(--hana-teal); 
+            font-size: 0.92rem; 
+            font-weight: 600; 
+            margin-bottom: 40px; 
+            line-height: 1.5;
+            word-break: keep-all;
+        }
+
+        .sub-title br { 
+            display: none; 
+        }
+
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); 
+            gap: 14px; 
+        } 
+
+        .btn { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            background: #fff; 
+            border: 1.5px solid var(--hana-teal); 
+            padding: 20px 15px; 
+            border-radius: 22px; 
+            text-decoration: none; 
+            transition: all 0.25s ease; 
+            cursor: pointer; 
+            position: relative; 
+            min-height: 135px; 
+            box-sizing: border-box;
+        }
+
+        .btn.disabled { 
+            background: #f8f9f9; 
+            border-color: #d1d9d9; 
+            opacity: 0.7;
+        }
+
+        .status-badge { 
+            font-size: 0.75rem; 
+            padding: 3px 10px; 
+            border-radius: 6px; 
+            font-weight: 700; 
+        }
+
+        .status-off { 
+            background: #fff1f1; 
+            color: #e5484d; 
+        }
+
+        .status-edu { 
+            background: #eff6ff; 
+            color: #2563eb; 
+        }
+
+        .btn:not(.disabled):hover { 
+            transform: translateY(-4px);
+            background-color: #f7fbfb;
+            box-shadow: 0 8px 20px rgba(0, 132, 133, 0.1);
+        }
+
+        .working-time { 
+            font-size: 0.8rem; 
+            color: var(--hana-teal); 
+            font-weight: 700; 
+            margin-bottom: 12px; 
+            background: var(--hana-teal-light); 
+            padding: 2px 8px; 
+            border-radius: 4px; 
+        }
+
+        .info-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .name-container { 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px; 
+            margin-bottom: 6px; 
+        }
+
+        .status-dot { 
+            width: 8px; 
+            height: 8px; 
+            border-radius: 50%; 
+            background-color: #ccc; 
+        }
+
+        .btn:not(.disabled) .status-dot { 
+            background-color: var(--active-green-pastel); 
+            box-shadow: 0 0 5px var(--active-green-pastel); 
+            animation: bulb-glow-pastel 3s infinite ease-in-out;
+        }
+
+        @keyframes bulb-glow-pastel {
+            0% { box-shadow: 0 0 3px var(--active-green-pastel); transform: scale(1); }
+            50% { box-shadow: 0 0 12px 3px var(--active-green-pastel); transform: scale(1.1); }
+            100% { box-shadow: 0 0 3px var(--active-green-pastel); transform: scale(1); }
+        }
+
+        .name { 
+            font-size: 1.25rem; 
+            font-weight: 800; 
+            color: #111; 
+            letter-spacing: 0.02em; 
+            line-height: 1.2; 
+            white-space: nowrap; 
+        }
+
+        .phone-number { 
+            font-size: 0.9rem; 
+            color: #666; 
+            font-weight: 600; 
+            margin-bottom: 12px; 
+        }
+
+        .status-text { 
+            font-size: 0.85rem; 
+            font-weight: 700; 
+        }
+
+        #admin-lock { 
+            position: absolute; 
+            top: 20px; 
+            right: 25px; 
+            font-size: 0.65rem; 
+            color: #ccc; 
+            cursor: pointer; 
+        }
+
+        #admin-panel { 
+            display: none; 
+            background: #333; 
+            color: #fff; 
+            padding: 15px; 
+            border-radius: 12px; 
+            margin-bottom: 20px; 
+            font-size: 0.8rem; 
+        }
+
+        .admin-active #admin-panel { 
+            display: block; 
+        }
+
+        .admin-active .admin-only { 
+            display: block; 
+        }
+
+        .admin-only { 
+            display: none; 
+            margin-top: 10px; 
+            width: 100%; 
+        }
+
+        select { 
+            width: 100%; 
+            padding: 6px; 
+            border-radius: 8px; 
+            border: 1px solid #ddd; 
+            font-size: 0.8rem; 
+        }
+
+        #pc-guide { 
+            display: none; 
+            margin-top: 45px; 
+            padding: 20px 25px; 
+            background: #f9fbfb; 
+            border-radius: 20px; 
+            text-align: left; 
+            border: 1px solid #edf1f1;
+        }
+
+        .guide-title { 
+            font-size: 0.9rem; 
+            font-weight: 800; 
+            color: var(--hana-teal-dark); 
+            margin-bottom: 12px; 
+            display: block;
+        }
+
+        .guide-text { 
+            font-size: 0.82rem; 
+            color: #555; 
+            line-height: 1.7; 
+            margin: 0; 
+            padding: 0; 
+            list-style: none; 
+        }
+
+        .guide-text li { 
+            margin-bottom: 4px; 
+            position: relative; 
+            padding-left: 15px; 
+        }
+
+        .guide-text li::before { 
+            content: '•'; 
+            position: absolute; 
+            left: 0; 
+            color: var(--hana-teal); 
+            font-weight: bold; 
+        }
+
+        .guide-note { 
+            font-size: 0.75rem; 
+            color: #999; 
+            margin-top: 15px; 
+            display: block; 
+            border-top: 1px solid #eee; 
+            padding-top: 15px; 
+        }
+
+        .footer { 
+            margin-top: 50px; 
+            font-size: 0.75rem; 
+            color: #bbb; 
+            font-weight: 600; 
+            letter-spacing: 1px; 
+        }
+
+        body.mobile-mode .container { 
+            padding: 40px 18px; 
+            border-radius: 28px; 
+            width: 92%; 
+        }
+
+        body.mobile-mode h1 { 
+            font-size: 1.8rem; 
+            letter-spacing: -1.5px; 
+        } 
+
+        body.mobile-mode .sub-title { 
+            font-size: 0.85rem; 
+            margin-bottom: 35px; 
+        }
+
+        body.mobile-mode .sub-title br { 
+            display: block; 
+        } 
+
+        body.mobile-mode .grid { 
+            grid-template-columns: 1fr; 
+            gap: 18px; 
+        } 
+
+        body.mobile-mode .btn { 
+            flex-direction: row; 
+            justify-content: space-between;
+            padding: 18px 20px; 
+            min-height: 95px;
+            border-radius: 24px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            flex-wrap: nowrap; 
+        }
+
+        body.mobile-mode .btn:not(.disabled) {
+            border-color: var(--hana-teal); 
+            background: linear-gradient(to right, #ffffff, #f7fef9);
+            box-shadow: 0 6px 20px rgba(134, 239, 172, 0.2);
+        }
+
+        body.mobile-mode .working-time { 
+            position: absolute; 
+            top: -10px; 
+            left: 18px; 
+            margin-bottom: 0; 
+            font-size: 0.65rem; 
+            border: 0.5px solid #d1d9d9;
+        }
+
+        body.mobile-mode .info-group { 
+            align-items: flex-start; 
+            justify-content: center; 
+            flex: 1; 
+        }
+
+        body.mobile-mode .name-container { 
+            margin-bottom: 4px; 
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        body.mobile-mode .name { 
+            font-size: 1.15rem; 
+            line-height: 1; 
+        }
+
+        body.mobile-mode .phone-number { 
+            font-size: 0.85rem; 
+            margin-bottom: 0; 
+            margin-left: 17px; 
+            color: #71717a; 
+            line-height: 1;
+        }
+
+        body.mobile-mode .status-text { 
+            text-align: right; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: flex-end; 
+            gap: 4px;
+            min-width: fit-content;
+        }
+
+        body.mobile-mode .status-dot { 
+            width: 9px; 
+            height: 9px; 
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="main-container">
+        <div id="admin-lock" onclick="checkAdmin()">ADMIN</div>
+        <div id="admin-panel">
+            <strong>⚙ 관리 시스템 접속됨</strong> | <span onclick="logout()" style="text-decoration: underline; cursor:pointer; color: #fbbf24">로그아웃</span>
+            <p style="margin: 8px 0 0; font-size: 0.75rem; color: #94a3b8;">상태를 변경하면 모든 사용자에게 즉시 업데이트됩니다.</p>
+        </div>
+        <h1>하나생명 GA 업무지원</h1>
+        <div class="sub-title">설계매니저를 선택하시면 <br>카카오톡으로 자동 연결됩니다.</div>
+        <div id="manager-grid" class="grid"></div>
+        <div id="pc-guide">
+            <span class="guide-title">🖥 PC 카카오톡 친구 추가 방법</span>
+            <ul class="guide-text">
+                <li>PC카톡 앱 우측 상단 <b>[친구 추가]</b> 클릭</li>
+                <li><b>[연락처로 추가]</b> 메뉴를 선택해 주세요.</li>
+                <li>매니저 이름 입력 후, 번호칸에 <b>Ctrl + V</b></li>
+            </ul>
+            <span class="guide-note">※ 매니저 클릭 시 번호가 클립보드에 자동 복사됩니다.<br>
+            💡 <b>모바일</b> 접속 시 카톡 프로필로 즉시 이동합니다.</span>
+        </div>
+        <div class="footer">© HANA LIFE INSURANCE</div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyBKpPSc7-yiuIcjqDthqgVtCTLsuPDATcA",
+            authDomain: "hanalife-ga-management.firebaseapp.com",
+            databaseURL: "https://hanalife-ga-management-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "hanalife-ga-management",
+            storageBucket: "hanalife-ga-management.firebasestorage.app",
+            messagingSenderId: "983229714033",
+            appId: "1:983229714033:web:a2ae2063e7ac94527ad5d0"
+        };
+        
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+        
+        const managers = [
+            { id: "m1", name: "강미현", time: "10:00 ~ 18:00", start: 10, end: 18, kakaoId: "urnOrSclAEqAdESlnJkudcBnMWY-", phone: "010-6623-1452" },
+            { id: "m2", name: "이연택", time: "10:00 ~ 18:00", start: 10, end: 18, kakaoId: "zxKd6qDxlPlmA5hprZN010wasVA-", phone: "010-9895-4296" },
+        ];
+        
+        const today = new Date();
+        const totalDays = Math.floor(today.getTime() / (1000 * 60 * 60 * 24));
+        const rotationIndex = totalDays % managers.length;
+        const rotatedManagers = [...managers.slice(rotationIndex), ...managers.slice(0, rotationIndex)];
+        
+        const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        if (isMobile) document.body.classList.add('mobile-mode');
+        
+        const isAdmin = sessionStorage.getItem('isAdmin') === 'true';
+        if (isAdmin) document.getElementById('main-container').classList.add('admin-active');
+        if (!isMobile) document.getElementById('pc-guide').style.display = 'block';
+
+        function renderGrid(statusData = {}) {
+            const grid = document.getElementById('manager-grid');
+            grid.innerHTML = '';
+            
+            const now = new Date();
+            const currHour = now.getHours();
+            const todayStr = now.toLocaleDateString('en-CA');
+            const dayOfWeek = now.getDay();
+            const FIXED_HOLIDAYS = ["2025-01-01", "2025-01-28", "2025-01-29", "2025-01-30", "2025-03-01", "2025-03-03", "2025-05-05", "2025-05-06", "2025-06-06", "2025-08-15", "2026-01-01", "2026-02-16", "2026-02-17", "2026-02-18", "2026-03-01", "2026-03-02", "2026-05-05", "2026-05-25", "2026-06-03", "2026-06-06", "2026-08-15", "2026-08-17", "2026-09-24", "2026-09-25", "2026-09-26", "2026-10-03", "2026-10-05", "2026-10-09", "2026-12-25"];
+            
+            db.ref('hana_team_events').once('value', (snapshot) => {
+                const events = snapshot.val() || {};
+                const isHolidayInDB = Object.values(events).some(ev => (ev.start && ev.start.substring(0, 10) === todayStr) && (ev.isHoliday === true || ev.display === 'background'));
+                const isRestDay = FIXED_HOLIDAYS.includes(todayStr) || isHolidayInDB || (dayOfWeek === 0 || dayOfWeek === 6);
+                
+                rotatedManagers.forEach(m => {
+                    const status = statusData[m.id] || 'active';
+                    let isWorkingHour = currHour >= m.start && currHour < m.end && !isRestDay;
+                    const isActive = status === 'active' && isWorkingHour;
+                    
+                    const btn = document.createElement('div');
+                    btn.className = `btn ${!isActive ? 'disabled' : ''}`;
+                    
+                    let statusText = "";
+                    let phoneDisplay = m.phone;
+                    
+                    if(status === 'off') {
+                        statusText = '<span class="status-badge status-off">휴무</span>';
+                        phoneDisplay = ""; 
+                    } else if(status === 'edu') {
+                        statusText = '<span class="status-badge status-edu">교육 중</span>';
+                        phoneDisplay = m.phone; 
+                    } else if(!isWorkingHour) {
+                        statusText = `<span style="color:#c62828; font-weight:900;">${isRestDay ? '공휴일' : '업무 종료'}</span>`;
+                        phoneDisplay = ""; 
+                    } else {
+                        statusText = `<span style="color:var(--hana-teal); font-weight:900;">연결 가능</span>`;
+                    }
+                    
+                    btn.innerHTML = `
+                        <div class="working-time">${m.time}</div>
+                        <div class="info-group">
+                            <div class="name-container">
+                                <div class="status-dot"></div>
+                                <div class="name">${m.name} 설계매니저</div>
+                            </div>
+                            <div class="phone-number">${phoneDisplay}</div>
+                        </div>
+                        <div class="status-text">${statusText}</div>
+                        <div class="admin-only" onclick="event.stopPropagation()">
+                            <select onchange="updateStatus('${m.id}', this.value)">
+                                <option value="active" ${status === 'active' ? 'selected' : ''}>정상업무</option>
+                                <option value="off" ${status === 'off' ? 'selected' : ''}>휴무</option>
+                                <option value="edu" ${status === 'edu' ? 'selected' : ''}>교육 중</option>
+                            </select>
+                        </div>
+                    `;
+                    
+                    btn.onclick = () => {
+                        if (isAdmin) return;
+                        if (status !== 'active') {
+                            alert(`${status === 'off' ? '휴무' : '교육 중'}입니다.`);
+                            return;
+                        }
+                        if (!isWorkingHour) {
+                            alert(`${m.name} 설계매니저의 업무시간이 아닙니다.\n긴급한 사항이 아닌 경우 평일 업무시간 내 연락해 주시기 바랍니다.`);
+                        }
+                        if (isMobile) {
+                            location.href = `kakaotalk://pgp/profiles/${m.kakaoId}`;
+                            setTimeout(() => { if (document.hasFocus()) location.href = `https://qr.kakao.com/talk/${m.kakaoId}`; }, 500);
+                        } else {
+                            copyToClipboard(m.phone);
+                            alert(`${m.name} 설계매니저의 연락처가 복사되었습니다.\n\nPC카톡에서 친구 추가 후 연락 바랍니다.`);
+                            location.href = `kakaotalk://`;
+                        }
+                    };
+                    grid.appendChild(btn);
+                });
+            });
+        }
+
+        function updateStatus(id, val) { 
+            db.ref('hana_status/' + id).set(val); 
+        }
+
+        function checkAdmin() {
+            const pw = prompt("관리자 비밀번호를 입력하세요.");
+            if (pw && btoa(pw) === "NTgwMzEx") {
+                sessionStorage.setItem('isAdmin', 'true');
+                location.reload();
+            } else if(pw) { 
+                alert("비밀번호가 틀렸습니다."); 
+            }
+        }
+
+        function logout() { 
+            sessionStorage.removeItem('isAdmin'); 
+            location.reload(); 
+        }
+
+        function copyToClipboard(val) {
+            const t = document.createElement("textarea");
+            document.body.appendChild(t);
+            t.value = val; 
+            t.select();
+            document.execCommand('copy');
+            document.body.removeChild(t);
+        }
+
+        renderGrid();
+
+        db.ref('hana_status').on('value', (statusSnapshot) => {
+            const adminStatus = statusSnapshot.val() || {};
+            const todayStr = new Date().toLocaleDateString('en-CA');
+            
+            db.ref('hana_team_events').once('value', (eventSnapshot) => {
+                const events = eventSnapshot.val() || {};
+                const mergedStatus = { ...adminStatus };
+                
+                Object.values(events).forEach(ev => {
+                    const isToday = ev.start && ev.start.substring(0, 10) === todayStr;
+                    const isLeave = ['연차', '반차', '여름휴가', '휴가'].some(k => (ev.title && ev.title.includes(k)));
+                    
+                    if (isToday && isLeave) {
+                        managers.forEach(m => {
+                            if (ev.title && ev.title.includes(m.name)) {
+                                mergedStatus[m.id] = 'off';
+                            }
+                        });
+                    }
+                });
+                renderGrid(mergedStatus);
+            });
+        });
+    </script>
+</body>
+</html>
